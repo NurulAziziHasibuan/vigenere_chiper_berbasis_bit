@@ -1,0 +1,36 @@
+import base64
+
+def xor_crypt_string(data, key, encode=False, decode=False):
+    if decode:
+        data = base64.b64decode(data.encode()).decode()
+    xored_decimal = [ord(c) ^ ord(key[i % len(key)]) for i, c in enumerate(data)]
+    xored_ascii = ''.join(chr(val) for val in xored_decimal)
+    if encode:
+        return base64.b64encode(xored_ascii.encode()).decode(), xored_decimal
+    return xored_ascii, xored_decimal
+
+def main():
+    while True:
+        print("1. Encrypt")
+        print("2. Decrypt")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            plaintext = input("Enter the plaintext: ")
+            key = input("Enter the key: ")
+            encrypted_text, xored_decimal = xor_crypt_string(plaintext, key, encode=True)
+            print("Encrypted Text (Base64):", encrypted_text)
+            print("XOR Decimal Result:", xored_decimal)
+        elif choice == "2":
+            encrypted_text = input("Enter the encrypted text: ")
+            key = input("Enter the key: ")
+            decrypted_text, xored_decimal = xor_crypt_string(encrypted_text, key, decode=True)
+            print("Decrypted Text:", decrypted_text)
+            print("XOR Decimal Result:", xored_decimal)
+        elif choice == "3":
+            break
+        else:
+            print("Invalid choice")
+
+if __name__ == "__main__":
+    main()
